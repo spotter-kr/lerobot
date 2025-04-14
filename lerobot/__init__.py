@@ -58,6 +58,7 @@ available_tasks_per_env = {
     ],
     "pusht": ["PushT-v0"],
     "xarm": ["XarmLift-v0"],
+    "ur5e_robosuite": [],
 }
 available_envs = list(available_tasks_per_env.keys())
 
@@ -85,6 +86,7 @@ available_datasets_per_env = {
         "lerobot/xarm_push_medium_image",
         "lerobot/xarm_push_medium_replay_image",
     ],
+    "ur5e_robosuite": [],
 }
 
 available_real_world_datasets = [
@@ -182,6 +184,7 @@ available_robots = [
     "aloha",
     "so100",
     "moss",
+    "ur5e",
 ]
 
 # lists all available cameras from `lerobot/common/robot_devices/cameras`
@@ -203,6 +206,7 @@ available_policies_per_env = {
     "xarm": ["tdmpc"],
     "koch_real": ["act_koch_real"],
     "aloha_real": ["act_aloha_real"],
+    "ur5e_robosuite": ["act", "diffusion"],
 }
 
 env_task_pairs = [(env, task) for env, tasks in available_tasks_per_env.items() for task in tasks]
