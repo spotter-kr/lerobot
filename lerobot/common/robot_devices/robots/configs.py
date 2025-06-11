@@ -837,7 +837,7 @@ class TmRobotConfig(ManipulatorRobotConfig):
         default_factory=lambda: {
             "main": RosMotorsBusConfig(
                 fps=30,
-                observation_topic_name='/leader/joint_trajectory_command_broadcaster_main/joint_trajectory',
+                observation_topic_name='/leader/joint_trajectory',
                 observation_msg_type="JointTrajectory",
                 motors={
                     # name: (index, ros_joint_name)
@@ -858,7 +858,7 @@ class TmRobotConfig(ManipulatorRobotConfig):
                 fps=30,
                 observation_topic_name='/joint_states',
                 observation_msg_type="JointState",
-                action_topic_name='/leader/joint_trajectory_command_broadcaster_main/joint_trajectory',
+                action_topic_name='/leader/joint_trajectory',
                 motors={
                     # name: (index, ros_joint_name)
                     "joint_1": [11, "joint_1"],
@@ -876,14 +876,14 @@ class TmRobotConfig(ManipulatorRobotConfig):
     cameras: dict[str, CameraConfig] = field(
         default_factory=lambda: {
             "cam_wrist": RosCameraConfig(
-                topic_name="/camera_wrist/image_raw",
+                topic_name="/cam_wrist/image_raw",
                 msg_type="Image",
                 fps=30,
                 width=640,
                 height=480,
             ),
             "cam_base": RosCameraConfig(
-                topic_name="/camera_base/image_raw",
+                topic_name="/cam_base/image_raw",
                 msg_type="Image",
                 fps=30,
                 width=640,
