@@ -237,7 +237,7 @@ class ManipulatorRobot:
                 "ManipulatorRobot doesn't have any device to connect. See example of usage in docstring of the class."
             )
 
-        if self.robot_type in ["ffw"]:
+        if self.robot_type in ["ffw", "tm"]:
             ensure_rclpy_init()
 
         # Connect the arms (do not start threads or spin here)
@@ -248,7 +248,7 @@ class ManipulatorRobot:
             print(f"Connecting {name} leader arm.")
             self.leader_arms[name].connect()
 
-        if self.robot_type in ["ffw"]:
+        if self.robot_type in ["ffw", "tm"]:
             ensure_rclpy_init()
             for name in self.cameras:
                 print(f"Connecting {name} camera.")
@@ -522,7 +522,7 @@ class ManipulatorRobot:
             follower_goal_pos[name] = goal_pos
 
             goal_pos = goal_pos.numpy().astype(np.float32)
-            if self.robot_type not in ["ffw"]: # FFW receives goal position via ROS Leader
+            if self.robot_type not in ["ffw", "tm"]: # FFW and TM receives goal position via ROS Leader
                 self.follower_arms[name].write("Goal_Position", goal_pos)
             self.logs[f"write_follower_{name}_goal_pos_dt_s"] = time.perf_counter() - before_fwrite_t
 

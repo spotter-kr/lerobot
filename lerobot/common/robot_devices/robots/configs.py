@@ -823,3 +823,73 @@ class FFWRobotConfig(ManipulatorRobotConfig):
     )
 
     mock: bool = False
+
+
+@RobotConfig.register_subclass("tm")
+@dataclass
+class TmRobotConfig(ManipulatorRobotConfig):
+    calibration_dir: str = ""
+    # `max_relative_target` limits the magnitude of the relative positional target vector for safety purposes.
+    # Set this to a positive scalar to have the same value for all motors, or a list that is the same length as
+    # the number of motors in your follower arms.
+    max_relative_target: int | None = None
+    leader_arms: dict[str, MotorsBusConfig] = field(
+        default_factory=lambda: {
+            "main": RosMotorsBusConfig(
+                fps=30,
+                observation_topic_name='/leader/joint_trajectory_command_broadcaster_main/joint_trajectory',
+                observation_msg_type="JointTrajectory",
+                motors={
+                    # name: (index, ros_joint_name)
+                    "joint_1": [11, "joint_1"],
+                    "joint_2": [12, "joint_2"],
+                    "joint_3": [13, "joint_3"],
+                    "joint_4": [14, "joint_4"],
+                    "joint_5": [15, "joint_5"],
+                    "joint_6": [16, "joint_6"],
+                    "gripper": [17, "gripper"],
+                },
+            ),
+        }
+    )
+    follower_arms: dict[str, MotorsBusConfig] = field(
+        default_factory=lambda: {
+            "main": RosMotorsBusConfig(
+                fps=30,
+                observation_topic_name='/joint_states',
+                observation_msg_type="JointState",
+                action_topic_name='/leader/joint_trajectory_command_broadcaster_main/joint_trajectory',
+                motors={
+                    # name: (index, ros_joint_name)
+                    "joint_1": [11, "joint_1"],
+                    "joint_2": [12, "joint_2"],
+                    "joint_3": [13, "joint_3"],
+                    "joint_4": [14, "joint_4"],
+                    "joint_5": [15, "joint_5"],
+                    "joint_6": [16, "joint_6"],
+                    "gripper": [17, "gripper"],
+                },
+            ),
+        }
+    )
+
+    cameras: dict[str, CameraConfig] = field(
+        default_factory=lambda: {
+            "cam_wrist": RosCameraConfig(
+                topic_name="/camera_wrist/image_raw",
+                msg_type="Image",
+                fps=30,
+                width=640,
+                height=480,
+            ),
+            "cam_base": RosCameraConfig(
+                topic_name="/camera_base/image_raw",
+                msg_type="Image",
+                fps=30,
+                width=640,
+                height=480,
+            ),
+        }
+    )
+
+    mock: bool = False
