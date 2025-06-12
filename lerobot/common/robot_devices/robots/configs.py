@@ -856,7 +856,7 @@ class TmRobotConfig(ManipulatorRobotConfig):
         default_factory=lambda: {
             "main": RosMotorsBusConfig(
                 fps=30,
-                observation_topic_name='/joint_states',
+                observation_topic_name='/follower/joint_states',
                 observation_msg_type="JointState",
                 action_topic_name='/leader/joint_trajectory',
                 motors={
