@@ -38,7 +38,7 @@ from lerobot.common.robot_devices.utils import busy_wait
 from lerobot.common.utils.utils import get_safe_torch_device, has_method
 
 
-def log_control_info(robot: Robot, dt_s, episode_index=None, frame_index=None, fps=None):
+def log_control_info(robot: Robot, dt_s, episode_index=None, frame_index=None, fps=None, prefix=""):
     log_items = []
     if episode_index is not None:
         log_items.append(f"ep:{episode_index}")
@@ -52,7 +52,7 @@ def log_control_info(robot: Robot, dt_s, episode_index=None, frame_index=None, f
             actual_fps = 1 / dt_val_s
             if actual_fps < fps - 1:
                 info_str = colored(info_str, "yellow")
-        log_items.append(info_str)
+        log_items.append(prefix + info_str)
 
     # total step time displayed in milliseconds and its frequency
     log_dt("dt", dt_s)
@@ -184,6 +184,7 @@ def warmup_record(
         events=events,
         fps=fps,
         teleoperate=enable_teleoperation,
+        log_prefix="Warmup Phase: ",
     )
 
 
@@ -207,6 +208,7 @@ def record_episode(
         fps=fps,
         teleoperate=policy is None,
         single_task=single_task,
+        log_prefix="Episode Phase: ",
     )
 
 
@@ -221,6 +223,7 @@ def control_loop(
     policy: PreTrainedPolicy = None,
     fps: int | None = None,
     single_task: str | None = None,
+    log_prefix: str = "",
 ):
     # TODO(rcadene): Add option to record logs
     if not robot.is_connected:
@@ -286,7 +289,7 @@ def control_loop(
             busy_wait(1 / fps - dt_s)
 
         dt_s = time.perf_counter() - start_loop_t
-        log_control_info(robot, dt_s, fps=fps)
+        log_control_info(robot, dt_s, fps=fps, prefix=log_prefix)
 
         timestamp = time.perf_counter() - start_episode_t
         if events["exit_early"]:
@@ -305,6 +308,7 @@ def reset_environment(robot, events, reset_time_s, fps):
         events=events,
         fps=fps,
         teleoperate=True,
+        log_prefix="Reset Phase: ",
     )
 
 
