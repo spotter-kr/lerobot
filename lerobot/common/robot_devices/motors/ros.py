@@ -247,7 +247,7 @@ class RosMotorsBus:
                     self.latest_joint_state = {}
                 self.latest_joint_state[name] = {
                     "position": joint_data["position"][idx],
-                    "velocity": joint_data["velocity"][idx]
+                    "velocity": 0 #joint_data["velocity"][idx] # Velocity is currently not used
                 }
                 self.logs[f"timestamp_utc_{name}"] = timestamp
 
@@ -331,7 +331,7 @@ class RosMotorsBus:
         if self.action_topic_name is not None:
             self._ros_publisher_node.publish(
                 JointTrajectory(joint_names=ros_joint_names,
-                                points=[JointTrajectoryPoint(positions=values, joint_names=ros_joint_names)]))
+                                points=[JointTrajectoryPoint(positions=values)]))
 
         # log the number of seconds it took to write the data to the motors
         delta_ts_name = get_log_name("delta_timestamp_s", "write", data_name, motor_names)
